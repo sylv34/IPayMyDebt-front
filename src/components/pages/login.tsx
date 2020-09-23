@@ -1,5 +1,5 @@
 
-import React, { FormEvent, useEffect, useRef } from 'react';
+import React, { FormEvent, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,10 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { LoginCredentialsType } from '../../helpers/user';
+import { LoginCredentialsType, LoginResponseType } from '../../helpers/user';
 import { userApi } from '../../services/api/userApi';
-import hasher from 'password-hash'
-
+import { AxiosError } from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -44,12 +43,15 @@ const Login = () => {
       e.preventDefault()
       const credentials: LoginCredentialsType = {
         email: email.current?.value!,
-        password: hasher.generate(password.current?.value!)
+        password: password.current?.value!
       }
-      const login = await userApi.userLogin(credentials)
-      if (hasher.verify(credentials.password, login.password!)) {
-        console.log(login)
-      }
+      userApi.userLogin(credentials)
+        .then((loginResponse: LoginResponseType) => {
+          console.log(loginResponse)
+        })
+        .catch((error: AxiosError<Error>) => {
+          console.log(error.response!.data)
+        })
     }
 
     return (

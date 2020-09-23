@@ -2,7 +2,6 @@ export interface SystemState {
    loggedIn: boolean,
    session: string,
    userId: number,
-   password?: string
 }
 
 export const UPDATE_SESSION = 'UPDATE_SESSION'

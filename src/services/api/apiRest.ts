@@ -34,7 +34,7 @@ export class ApiBase {
      * @returns {Promise<R>} HTTP `axios` response payload.
      * @memberof Api
      */
-    public get<T, R = AxiosResponse<T>> (url: string): Promise<R> {
+    public get<R> (url: string): Promise<R> {
         return this.api.get(url, this.config());
     }
 
@@ -49,7 +49,7 @@ export class ApiBase {
      * @returns {Promise<R>} - HTTP [axios] response payload.
      * @memberof Api
      */
-    public delete<T, R = AxiosResponse<T>> (url: string): Promise<R> {
+    public delete<R>(url: string): Promise<R> {
         return this.api.delete(url, this.config());
     }
 
@@ -66,7 +66,7 @@ export class ApiBase {
      * @returns {Promise<R>} - HTTP [axios] response payload.
      */
     public post<T, B, R = AxiosResponse<T>> (url: string, data?: B): Promise<R> {
-        return this.api.post(url, data, this.config());
+        return this.api.post<T, R>(url, data, this.config());
     }
 
     /**

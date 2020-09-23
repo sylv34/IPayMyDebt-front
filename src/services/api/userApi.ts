@@ -1,7 +1,7 @@
 import { ApiBase } from "./apiBase";
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { SystemState } from "../../redux/store/system/type";
-import { LoginCredentialsType } from "../../helpers/user";
+import { LoginCredentialsType, LoginResponseType } from "../../helpers/user";
 
 
 export class UserApi extends ApiBase {
@@ -16,8 +16,12 @@ export class UserApi extends ApiBase {
     // this.getById = this.getById.bind(this);
   }
 
-  public async userLogin (credentials: LoginCredentialsType): Promise<SystemState> {
-      return this.post<SystemState, LoginCredentialsType, AxiosResponse<SystemState>>("/auth/login", credentials).then(this.success)
+  public async userLogin (credentials: LoginCredentialsType): Promise<LoginResponseType> {
+      const response : AxiosResponse<any> = await this.post<LoginResponseType, LoginCredentialsType>("/auth/login", credentials)
+      return {
+        hashedPassword: response.data.password
+      }
+
   }
 
 //   public userRegister (user: User): Promise<number> {

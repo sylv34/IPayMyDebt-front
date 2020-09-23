@@ -1,5 +1,5 @@
 
-import React, { FormEvent, useRef } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container';
 import { LoginCredentialsType, LoginResponseType } from '../../helpers/user';
 import { userApi } from '../../services/api/userApi';
 import { AxiosError } from 'axios';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,7 +39,8 @@ const Login = () => {
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
     
-    
+    const [error, setError] = useState('')
+
     const handleLogin = async (e:FormEvent) => {
       e.preventDefault()
       const credentials: LoginCredentialsType = {
@@ -49,8 +51,8 @@ const Login = () => {
         .then((loginResponse: LoginResponseType) => {
           console.log(loginResponse)
         })
-        .catch((error: AxiosError<Error>) => {
-          console.log(error.response!.data)
+        .catch((error: AxiosError<string>) => {
+          setError(error.response!.data)
         })
     }
 
@@ -86,6 +88,7 @@ const Login = () => {
               autoComplete="current-password"
               inputRef={password}
             />
+            <FormHelperText error={true}>{error}</FormHelperText>
             <Button
               type="submit"
               fullWidth

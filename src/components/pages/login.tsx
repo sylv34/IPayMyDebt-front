@@ -43,16 +43,21 @@ const Login = () => {
 
     const handleLogin = async (e:FormEvent) => {
       e.preventDefault()
+      setError('')
       const credentials: LoginCredentialsType = {
         email: email.current?.value!,
         password: password.current?.value!
       }
       userApi.userLogin(credentials)
         .then((loginResponse: LoginResponseType) => {
-          console.log(loginResponse)
+          
         })
         .catch((error: AxiosError<string>) => {
-          setError(error.response!.data)
+          if (error.response && error.response.data) {
+            setError(error.response!.data)
+          } else {
+            setError("Une erreur est survenu. Reesayer ulterieurement")
+          }
         })
     }
 
